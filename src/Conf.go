@@ -29,8 +29,9 @@ import (
 )
 
 type config struct {
-	DB    database `toml:"database"`
-	Users []user   `toml:"user"`
+	RateLimit rateLimit `toml:"ratelimit"`
+	DB        database  `toml:"database"`
+	Users     []user    `toml:"user"`
 }
 
 type user struct {
@@ -44,6 +45,11 @@ type database struct {
 	Host     string
 	Port     string
 	Database string
+}
+
+type rateLimit struct {
+	Limit int
+	Burst int
 }
 
 func ParseConfig(fileName string, conf interface{}) error {

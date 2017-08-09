@@ -38,40 +38,37 @@ type Route struct {
 
 type Routes []Route
 
-var routes = Routes{
-	Route{
-		"Index",
-		"POST",
-		"/",
-		"default page",
-		Index,
-	},
-	Route{
-		"Help",
-		"POST",
-		"/help",
-		"help page",
-		Help,
-	},
-	Route{
-		"HelpCmd",
-		"POST",
-		"/help/{cmd}",
-		"help for specific command",
-		HelpCmd,
-	},
-	Route{
-		"projects",
-		"POST",
-		"/projects",
-		"show all projects",
-		ProjectsHandler,
-	},
-	Route{
-		"project",
-		"POST",
-		"/project/{project}",
-		"show specific project",
-		ProjectHandler,
-	},
+var routes Routes
+
+func init() {
+	routes = Routes{
+		Route{
+			"Index",
+			"POST",
+			"/",
+			"default page",
+			Index,
+		},
+		Route{
+			"Help",
+			"POST",
+			"/help",
+			"help page",
+			Help,
+		},
+		Route{
+			"projects",
+			"POST",
+			"/projects",
+			"show all projects",
+			ProjectsHandler,
+		},
+		Route{
+			"project",
+			"POST",
+			"/project/{project}",
+			"show specific project",
+			ProjectHandler,
+		},
+	}
 }

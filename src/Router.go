@@ -53,7 +53,7 @@ func AddRoutes(router *mux.Router) {
 	Error(err)
 
 	// rate limiter
-	quota := throttled.RateQuota{throttled.PerMin(TROTTLEDREQUESTS), TROTTLEDBURST}
+	quota := throttled.RateQuota{throttled.PerMin(Conf.RateLimit.Limit), Conf.RateLimit.Burst}
 	rateLimiter, err := throttled.NewGCRARateLimiter(store, quota)
 	Error(err)
 

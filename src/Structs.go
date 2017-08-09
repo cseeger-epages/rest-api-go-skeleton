@@ -28,6 +28,11 @@ type HelpMsg struct {
 	Message string `json:"message"`
 }
 
+type PathList struct {
+	Pattern     string
+	Description string
+}
+
 type ErrorMsg struct {
 	Error string `json:"error"`
 }

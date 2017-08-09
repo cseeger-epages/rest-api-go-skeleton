@@ -26,7 +26,6 @@ package main
 
 import (
 	"crypto/sha256"
-	_ "encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -64,22 +63,15 @@ func Help(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-store")
 
 	qs := ParseQueryStrings(r)
-	message := fmt.Sprintf("http://%s/help/[cmd]", r.Host)
-	msg := HelpMsg{Message: message}
-	EncodeAndSend(w, r, qs, msg)
-}
 
-// specific route help reference
-func HelpCmd(w http.ResponseWriter, r *http.Request) {
-	// never cache help commands
-	w.Header().Set("Cache-Control", "no-store")
+	var msg []PathList
 
-	qs := ParseQueryStrings(r)
-	vars := mux.Vars(r)
-	cmd := vars["cmd"]
-	message := fmt.Sprintf("help show: %s", cmd)
-	msg := HelpMsg{Message: message}
+	for _, m := range routes {
+		msg = append(msg, PathList{m.Pattern, m.Description})
+	}
+
 	EncodeAndSend(w, r, qs, msg)
+
 }
 
 // Handler returning a list of all Projects
