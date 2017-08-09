@@ -7,6 +7,10 @@ Can be used as a start for creating more advanced versions.
 ```
 go get github.com/cseeger-epages/rest-api-go-skeleton
 ```
+or simply clone the repo
+```
+git clone https://github.com/cseeger-epages/rest-api-go-skeleton
+```
 
 ## Configuration
 add users by adding
@@ -81,9 +85,17 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 
 ## Not (yet) implemented
 - X-HTTP-Method-Override
-- caching - serverside (varnish ?)
-- Authentication
-- oauth(2) 
+- caching serverside (varnish ?)
+- Authentication - oauth(2) 
+
+## additional Notes
+The Etag implementation lacks a bit of efficency since the data needs to be generated all the time to generate the Etag hash and it only saves some amount of traffic. 
+When you are implementing your data think about how you can generate the Etag on using lesser resources.
+
+Also only the basic Auth is implemented yet wich isn't very efficient, maybe some OAuth2 will be implemented later. 
+If you send less data via many requests an OAuth implementation will save some bandwidth.
+
+X-HTTP-Method-Override should be implemented when using more than GET or POST methods, e.g when you implement PUT, PATCH or DELETE method to support all kinds of clients.
 
 ## Ratelimit Headers
 ```
@@ -106,15 +118,15 @@ openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 
 ## some curls
 ```
-curl -k -X POST https://localhost:8443/
-curl -k -X POST https://localhost:8443/help
-curl -k -X POST https://localhost:8443/help/[cmd]
-curl -k -X POST https://localhost:8443/projects
-curl -k -X POST https://localhost:8443/project/[name|id]
+curl -k -X GET -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" https://localhost:8443/
+curl -k -X GET -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" https://localhost:8443/help
+curl -k -X GET -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" https://localhost:8443/projects
+curl -k -X GET -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" https://localhost:8443/project/[name|id]
 
-
-curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -k -X POST https://localhost:8443/projects\?prettify
-curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -H "If-None-Match: <some etag>" -k -X POST https://localhost:8443/projects\?prettify
+#pretify test
+curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -k -X GET https://localhost:8443/projects\?prettify
+#etag test
+curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -H "If-None-Match: <some etag>" -k -X GET https://localhost:8443/projects\?prettify
 ```
 
 ## basic auth test stuff
