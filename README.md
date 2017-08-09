@@ -81,11 +81,9 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 
 ## Not (yet) implemented
 - X-HTTP-Method-Override
--- actually only POST is used
-- caching - serverside
--- varnish 
+- caching - serverside (varnish ?)
 - Authentication
--- oauth(2) 
+- oauth(2) 
 
 ## Ratelimit Headers
 ```

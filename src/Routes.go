@@ -44,28 +44,28 @@ func init() {
 	routes = Routes{
 		Route{
 			"Index",
-			"POST",
+			"GET",
 			"/",
 			"default page",
 			Index,
 		},
 		Route{
 			"Help",
-			"POST",
+			"GET",
 			"/help",
 			"help page",
 			Help,
 		},
 		Route{
 			"projects",
-			"POST",
+			"GET",
 			"/projects",
 			"show all projects",
 			ProjectsHandler,
 		},
 		Route{
 			"project",
-			"POST",
+			"GET",
 			"/project/{project}",
 			"show specific project",
 			ProjectHandler,
