@@ -23,6 +23,18 @@ conf/api.conf section `[database]`
 
 customize your Database functions in src/Database.go for your needs
 
+## build and run
+you can build the binary via
+```
+./build.sh
+```
+and the following flags are supported
+```
+-crt  <certificate file>
+-key  <certificate key file>
+-c    <config file>
+```
+
 ## Further Implementation
 add your custom Handlers to src/Handler.go and add them to src/Routes.go with the following pattern
 ```
