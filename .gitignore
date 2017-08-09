@@ -1,2 +1,4 @@
 /certs/*
+!/certs/README.md
 /bin/*
+!/bin/README.md
