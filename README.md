@@ -1,14 +1,14 @@
-##REST API Skeleton written in golang
+# REST API Skeleton written in golang
 
 This is a very simple version supporting common features used in REST API implementations. 
 Can be used as a start for creating more advanced versions.
 
-###Installation
+## Installation
 ```
 go get github.com/cseeger-epages/rest-api-go-skeleton
 ```
 
-###Configuration
+## Configuration
 add users by adding
 ```
 [[user]]
@@ -23,7 +23,7 @@ conf/api.conf section `[database]`
 
 customize your Database functions in src/Database.go for your needs
 
-###Further Implementation
+## Further Implementation
 add your custom Handlers to src/Handler.go and add them to src/Routes.go with the following pattern
 ```
 Route{
@@ -54,7 +54,7 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 }
 ```
 
-###Supported Features
+## Supported Features
 - path routing using gorilla mux
 - versioning
 - Database wrapper 
@@ -67,7 +67,7 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 - error handler
 - logging
 
-###Not (yet) implemented
+## Not (yet) implemented
 - X-HTTP-Method-Override
 -- actually only POST is used
 - caching - serverside
@@ -75,12 +75,14 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 - Authentication
 -- oauth(2) 
 
-###Ratelimit Headers
+## Ratelimit Headers
+```
 X-Ratelimit-Limit - The number of allowed requests in the current period
 X-Ratelimit-Remaining - The number of remaining requests in the current period
 X-Ratelimit-Reset - The number of seconds left in the current period
+```
 
-###generate certificates
+## generate certificates
 ```
 cd certs
 # Key considerations for algorithm "RSA" ≥ 2048-bit
@@ -92,7 +94,7 @@ openssl ecparam -genkey -name secp384r1 -out server.key
 openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 ```
 
-###some curls
+## some curls
 ```
 curl -k -X POST https://localhost:8443/
 curl -k -X POST https://localhost:8443/help
@@ -105,7 +107,7 @@ curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -k -X POST https://lo
 curl -v -H "Authorization: Basic dGVzdHVzZXI6dGVzdHBhc3MK" -H "If-None-Match: <some etag>" -k -X POST https://localhost:8443/projects\?prettify
 ```
 
-###basic auth test stuff
+## basic auth test stuff
 ```
 testuser:testpass - dGVzdHVzZXI6dGVzdHBhc3MK
 username:password - dXNlcm5hbWU6cGFzc3dvcmQK
