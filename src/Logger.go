@@ -25,10 +25,67 @@
 package main
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/http"
+	"os"
 	"time"
 )
+
+func InitLogger() {
+	switch Conf.Logging.Type {
+	case LOGFORMATJSON:
+		log.SetFormatter(&log.JSONFormatter{})
+	case LOGFORMATTEXT:
+		log.SetFormatter(&log.TextFormatter{})
+	default:
+		log.WithFields(log.Fields{
+			"logformat": Conf.Logging.Type,
+			"default":   LOGFORMATTEXT,
+		}).Error("unknown logformat using default")
+	}
+
+	switch Conf.Logging.Loglevel {
+	case INFO:
+		log.SetLevel(log.InfoLevel)
+	case ERROR:
+		log.SetLevel(log.ErrorLevel)
+	case DEBUG:
+		log.SetLevel(log.DebugLevel)
+	default:
+		log.WithFields(log.Fields{
+			"loglevel": Conf.Logging.Loglevel,
+			"default":  INFO,
+		}).Error("unknown loglevel using default")
+		log.SetLevel(log.InfoLevel)
+	}
+
+	switch Conf.Logging.Output {
+	case LOGFILE:
+		logfile, err := os.OpenFile(Conf.Logging.Logfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.WithFields(log.Fields{
+				"filepath": Conf.Logging.Logfile,
+			}).Error("can't open logfile use stdout")
+			Conf.Logging.Output = LOGSTDOUT
+		}
+		log.SetOutput(logfile)
+		log.WithFields(log.Fields{
+			"output": LOGFILE,
+			"format": Conf.Logging.Type,
+		}).Debug("initialising logging")
+	case LOGSTDOUT:
+		log.WithFields(log.Fields{
+			"output": LOGSTDOUT,
+			"format": Conf.Logging.Type,
+		}).Debug("using logging method")
+	default:
+		log.WithFields(log.Fields{
+			"output":  Conf.Logging.Output,
+			"default": LOGSTDOUT,
+		}).Error("unknown log output using default")
+		Conf.Logging.Output = LOGSTDOUT
+	}
+}
 
 func Logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -36,12 +93,11 @@ func Logger(inner http.Handler, name string) http.Handler {
 
 		inner.ServeHTTP(w, r)
 
-		log.Printf(
-			"%s\t%s\t%s\t%s",
-			r.Method,
-			r.RequestURI,
-			name,
-			time.Since(start),
-		)
+		log.WithFields(log.Fields{
+			"method":      r.Method,
+			"request-uri": r.RequestURI,
+			"duration":    time.Since(start),
+			"name":        name,
+		}).Info("REQUEST")
 	})
 }

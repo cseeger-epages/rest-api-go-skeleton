@@ -27,6 +27,7 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -80,8 +81,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=2592000")
 
 	qs := ParseQueryStrings(r)
-	projects, err := GetProjects()
-	Error(err)
+	projects := Projects{[]Project{Project{1, "P1"}, Project{2, "P2"}, Project{3, "P3"}}}
 	EncodeAndSend(w, r, qs, projects)
 }
 
@@ -98,14 +98,26 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request) {
 	var projects Projects
 	var perr error = nil
 
+	projectlist := []Project{Project{1, "P1"}, Project{2, "P2"}, Project{3, "P3"}}
+
 	if pid, err := strconv.Atoi(project); err == nil {
-		projects, perr = GetProject(pid)
+		projects, perr = Projects{}, errors.New("project does not exists")
+		for _, v := range projectlist {
+			if v.Id == pid {
+				projects, perr = Projects{[]Project{v}}, nil
+			}
+		}
 	} else {
 		project = strings.ToLower(project)
-		projects, perr = GetProject(project)
+		projects, perr = Projects{}, errors.New("project does not exists")
+		for _, v := range projectlist {
+			if strings.ToLower(v.Name) == project {
+				projects, perr = Projects{[]Project{v}}, nil
+			}
+		}
 	}
 	if perr != nil {
-		msg = ErrorMsg{"project does not exists"}
+		msg = ErrorMsg{perr.Error()}
 	} else {
 		msg = projects
 	}
@@ -158,5 +170,5 @@ func EncodeAndSend(w http.ResponseWriter, r *http.Request, qs QueryStrings, msg 
 	} else {
 		err = json.NewEncoder(w).Encode(msg)
 	}
-	Error(err)
+	Error("json parse error", err)
 }

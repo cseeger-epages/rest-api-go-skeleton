@@ -50,12 +50,12 @@ func NewRouter() *mux.Router {
 // add default routes + ratelimit
 func AddRoutes(router *mux.Router) {
 	store, err := memstore.New(65536)
-	Error(err)
+	Error("ROUTES: could not create memstore", err)
 
 	// rate limiter
 	quota := throttled.RateQuota{throttled.PerMin(Conf.RateLimit.Limit), Conf.RateLimit.Burst}
 	rateLimiter, err := throttled.NewGCRARateLimiter(store, quota)
-	Error(err)
+	Error("ROUTES: error in ratelimiting", err)
 
 	httpRateLimiter := throttled.HTTPRateLimiter{
 		RateLimiter: rateLimiter,
