@@ -46,22 +46,26 @@ func DBOpen() (*sql.DB, error) {
 	return db, nil
 }
 
-func GetProjects() (Projects, error) {
+func mysqldummy() (Projects, error) {
 	var (
 		id  int
 		val string
 		ret []Project
 	)
+
 	db, err := DBOpen()
+	defer db.Close()
+
 	if err != nil {
 		return Projects{}, err
 	}
-	defer db.Close()
+
 	data, err := db.Query("select project_id, value from t_project")
-	if err != nil {
-		return Projects{}, err
-	}
 	defer data.Close()
+	if err != nil {
+		return Projects{}, err
+	}
+
 	for data.Next() {
 		err = data.Scan(&id, &val)
 		if err != nil {
@@ -69,47 +73,6 @@ func GetProjects() (Projects, error) {
 		}
 		ret = append(ret, Project{Id: id, Name: val})
 	}
+
 	return Projects{ret}, nil
-}
-
-func GetProject(project interface{}) (Projects, error) {
-	var (
-		id   int
-		val  string
-		ret  []Project
-		stmt *sql.Stmt
-	)
-	db, err := DBOpen()
-	if err != nil {
-		return Projects{}, err
-	}
-	defer db.Close()
-	switch project.(type) {
-	case string:
-		stmt, err = db.Prepare("select project_id, value from t_project where lower(value) = ?")
-	case int:
-		stmt, err = db.Prepare("select project_id, value from t_project where project_id = ?")
-	}
-	defer stmt.Close()
-	if err != nil {
-		return Projects{}, err
-	}
-	data, err := stmt.Query(project)
-	if err != nil {
-		return Projects{}, err
-	}
-	for data.Next() {
-		err = data.Scan(&id, &val)
-		if err != nil {
-			return Projects{}, err
-		}
-		ret = append(ret, Project{Id: id, Name: val})
-	}
-	if ret != nil {
-		return Projects{ret}, nil
-
-	} else {
-		return Projects{}, errors.New("project does not exists")
-
-	}
 }
