@@ -29,6 +29,8 @@ import (
 )
 
 type config struct {
+	Certs     certs     `toml:"certs"`
+	Logging   logging   `toml:"logging"`
 	RateLimit rateLimit `toml:"ratelimit"`
 	DB        database  `toml:"database"`
 	Users     []user    `toml:"user"`
@@ -52,8 +54,19 @@ type rateLimit struct {
 	Burst int
 }
 
+type logging struct {
+	Type     string
+	Loglevel string
+	Output   string
+	Logfile  string
+}
+
+type certs struct {
+	Public  string
+	Private string
+}
+
 func ParseConfig(fileName string, conf interface{}) error {
 	_, err := toml.DecodeFile(fileName, conf)
-	Error(err)
-	return nil
+	return err
 }

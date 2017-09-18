@@ -29,20 +29,24 @@ import (
 	"net/http"
 )
 
-var Conf config
+var (
+	Conf     config
+	confFile *string
+)
 
-func main() {
-
-	crt := flag.String("crt", "/path/to/server.crt", "path to server certificate file")
-	key := flag.String("key", "/path/to/server.key", "path to certificate key file")
-	confFile := flag.String("c", "conf/api.conf", "path to config file")
+func init() {
+	confFile = flag.String("c", "conf/api.conf", "path to config file")
 	flag.Parse()
 
 	err := ParseConfig(*confFile, &Conf)
-	Error(err)
+	Error("config parse error", err)
 
+	InitLogger()
+}
+
+func main() {
 	router := NewRouter()
 
-	err = http.ListenAndServeTLS(":8443", *crt, *key, router)
-	Error(err)
+	err := http.ListenAndServeTLS(":8443", Conf.Certs.Public, Conf.Certs.Private, router)
+	Error("can't start server", err)
 }

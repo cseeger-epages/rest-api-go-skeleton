@@ -25,11 +25,13 @@
 package main
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
-func Error(err error) {
+func Error(msg string, err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.WithFields(log.Fields{
+			"err": err,
+		}).Error(msg)
 	}
 }

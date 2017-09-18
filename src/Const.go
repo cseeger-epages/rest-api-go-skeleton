@@ -24,54 +24,12 @@
 
 package main
 
-import (
-	"database/sql"
-	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+const (
+	INFO          string = "info"
+	ERROR         string = "error"
+	DEBUG         string = "debug"
+	LOGSTDOUT     string = "stdout"
+	LOGFILE       string = "logfile"
+	LOGFORMATJSON string = "json"
+	LOGFORMATTEXT string = "text"
 )
-
-func DBOpen() (*sql.DB, error) {
-	system := fmt.Sprintf("%s:%s", Conf.DB.Host, Conf.DB.Port)
-	dsn := fmt.Sprintf("%s:%s@%s(%s)/%s", Conf.DB.User, Conf.DB.Password, "tcp", system, Conf.DB.Database)
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
-}
-
-func mysqldummy() (Projects, error) {
-	var (
-		id  int
-		val string
-		ret []Project
-	)
-
-	db, err := DBOpen()
-	defer db.Close()
-
-	if err != nil {
-		return Projects{}, err
-	}
-
-	data, err := db.Query("select project_id, value from t_project")
-	defer data.Close()
-	if err != nil {
-		return Projects{}, err
-	}
-
-	for data.Next() {
-		err = data.Scan(&id, &val)
-		if err != nil {
-			return Projects{}, err
-		}
-		ret = append(ret, Project{Id: id, Name: val})
-	}
-
-	return Projects{ret}, nil
-}
