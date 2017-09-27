@@ -26,6 +26,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 )
 
@@ -47,6 +48,8 @@ func init() {
 func main() {
 	router := NewRouter()
 
-	err := http.ListenAndServeTLS(":8443", Conf.Certs.Public, Conf.Certs.Private, router)
+	listen := fmt.Sprintf("%s:%s", Conf.General.Listen, Conf.General.Port)
+
+	err := http.ListenAndServeTLS(listen, Conf.Certs.Public, Conf.Certs.Private, router)
 	Error("can't start server", err)
 }

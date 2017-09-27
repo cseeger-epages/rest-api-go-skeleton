@@ -29,6 +29,7 @@ import (
 )
 
 type config struct {
+	General   general   `toml:"general"`
 	Certs     certs     `toml:"certs"`
 	Logging   logging   `toml:"logging"`
 	RateLimit rateLimit `toml:"ratelimit"`
@@ -36,9 +37,26 @@ type config struct {
 	Users     []user    `toml:"user"`
 }
 
-type user struct {
-	Username string
-	Password string
+type general struct {
+	Listen string
+	Port   string
+}
+
+type certs struct {
+	Public  string
+	Private string
+}
+
+type logging struct {
+	Type     string
+	Loglevel string
+	Output   string
+	Logfile  string
+}
+
+type rateLimit struct {
+	Limit int
+	Burst int
 }
 
 type database struct {
@@ -49,21 +67,9 @@ type database struct {
 	Database string
 }
 
-type rateLimit struct {
-	Limit int
-	Burst int
-}
-
-type logging struct {
-	Type     string
-	Loglevel string
-	Output   string
-	Logfile  string
-}
-
-type certs struct {
-	Public  string
-	Private string
+type user struct {
+	Username string
+	Password string
 }
 
 func ParseConfig(fileName string, conf interface{}) error {
