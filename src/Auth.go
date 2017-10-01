@@ -37,6 +37,14 @@ func basicAuth(h http.Handler) http.Handler {
 		username, password, authOK := r.BasicAuth()
 		if authOK == false {
 			http.Error(w, "Not authorized", 401)
+			xff := r.Header.Get("X-FORWARDED-FOR")
+			if xff == "" {
+				xff = "not set"
+			}
+			Debug("Authorization error", map[string]interface{}{
+				"RemoteAddr":     r.RemoteAddr,
+				"X-FORWARDD-FOR": xff,
+			})
 			return
 		}
 
@@ -50,7 +58,6 @@ func basicAuth(h http.Handler) http.Handler {
 		if !valid {
 			http.Error(w, "Not authorized", 401)
 			return
-
 		}
 
 		h.ServeHTTP(w, r)

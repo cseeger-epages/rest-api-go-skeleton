@@ -144,10 +144,12 @@ func ParseQueryStrings(r *http.Request) QueryStrings {
 func EncodeAndSend(w http.ResponseWriter, r *http.Request, qs QueryStrings, msg interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
+	var err error
 	// i need to encode the data twice for checking etag
 	// and for sending with/without prettyfy maybe there
 	// is a better way
-	etagdata, _ := json.Marshal(msg)
+	etagdata, err := json.Marshal(msg)
+	Error("json marshal error etag", err)
 	etagsha := sha256.Sum256([]byte(etagdata))
 	etag := fmt.Sprintf("%x", etagsha)
 	w.Header().Set("ETag", etag)
@@ -160,8 +162,6 @@ func EncodeAndSend(w http.ResponseWriter, r *http.Request, qs QueryStrings, msg 
 	}
 
 	w.WriteHeader(http.StatusOK)
-
-	var err error
 
 	if qs.prettify {
 		encoder := json.NewEncoder(w)
