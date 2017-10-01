@@ -117,7 +117,7 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if perr != nil {
-		msg = ErrorMsg{perr.Error()}
+		msg = ErrorMessage{perr.Error()}
 	} else {
 		msg = projects
 	}

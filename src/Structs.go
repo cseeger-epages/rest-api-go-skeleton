@@ -33,7 +33,7 @@ type PathList struct {
 	Description string
 }
 
-type ErrorMsg struct {
+type ErrorMessage struct {
 	Error string `json:"error"`
 }
 
