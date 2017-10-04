@@ -25,8 +25,6 @@
 package main
 
 import (
-	"crypto/sha256"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -122,53 +120,4 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request) {
 		msg = projects
 	}
 	EncodeAndSend(w, r, qs, msg)
-}
-
-// Parse filter functions
-func ParseQueryStrings(r *http.Request) QueryStrings {
-	vals := r.URL.Query()
-
-	// set defaults
-	qs := QueryStrings{false}
-
-	// Parse
-	_, ok := vals["prettify"]
-	if ok {
-		qs.prettify = true
-	}
-
-	return qs
-}
-
-// Handles some filters and does what the name says
-func EncodeAndSend(w http.ResponseWriter, r *http.Request, qs QueryStrings, msg interface{}) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-
-	var err error
-	// i need to encode the data twice for checking etag
-	// and for sending with/without prettyfy maybe there
-	// is a better way
-	etagdata, err := json.Marshal(msg)
-	Error("json marshal error etag", err)
-	etagsha := sha256.Sum256([]byte(etagdata))
-	etag := fmt.Sprintf("%x", etagsha)
-	w.Header().Set("ETag", etag)
-
-	if match := r.Header.Get("If-None-Match"); match != "" {
-		if strings.Contains(match, etag) {
-			w.WriteHeader(http.StatusNotModified)
-			return
-		}
-	}
-
-	w.WriteHeader(http.StatusOK)
-
-	if qs.prettify {
-		encoder := json.NewEncoder(w)
-		encoder.SetIndent("", " ")
-		err = encoder.Encode(msg)
-	} else {
-		err = json.NewEncoder(w).Encode(msg)
-	}
-	Error("json parse error", err)
 }

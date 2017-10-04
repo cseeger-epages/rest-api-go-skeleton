@@ -54,6 +54,8 @@ type tlsconf struct {
 	CurvePrefs          []string
 	Ciphers             []string
 	PreferServerCiphers bool
+	Hsts                bool
+	HstsMaxAge          int
 }
 
 type logging struct {

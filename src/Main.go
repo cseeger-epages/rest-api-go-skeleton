@@ -40,6 +40,7 @@ func init() {
 
 	err := ParseConfig(*confFile, &Conf)
 	Error("config parse error", err)
+	os.Exit(1)
 
 	InitLogger()
 }
@@ -53,7 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	Debug("starting server", map[string]interface{}{"ip": Conf.General.Listen, "port": Conf.General.Port})
+	Info("starting server", map[string]interface{}{"ip": Conf.General.Listen, "port": Conf.General.Port})
 	err = s.ServeTLS(l, Conf.Certs.Public, Conf.Certs.Private)
 	Error("can't start server", err)
 }
