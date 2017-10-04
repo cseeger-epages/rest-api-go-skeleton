@@ -26,8 +26,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"net/http"
+	"os"
 )
 
 var (
@@ -48,8 +47,13 @@ func init() {
 func main() {
 	router := NewRouter()
 
-	listen := fmt.Sprintf("%s:%s", Conf.General.Listen, Conf.General.Port)
+	s, l, err := CreateServerAndListener(router, Conf.General.Listen, Conf.General.Port)
+	if err != nil {
+		Error("can not create server", err)
+		os.Exit(1)
+	}
 
-	err := http.ListenAndServeTLS(listen, Conf.Certs.Public, Conf.Certs.Private, router)
+	Debug("starting server", map[string]interface{}{"ip": Conf.General.Listen, "port": Conf.General.Port})
+	err = s.ServeTLS(l, Conf.Certs.Public, Conf.Certs.Private)
 	Error("can't start server", err)
 }

@@ -31,6 +31,7 @@ import (
 type config struct {
 	General   general   `toml:"general"`
 	Certs     certs     `toml:"certs"`
+	Tls       tlsconf   `toml:"tls"`
 	Logging   logging   `toml:"logging"`
 	RateLimit rateLimit `toml:"ratelimit"`
 	DB        database  `toml:"database"`
@@ -45,6 +46,13 @@ type general struct {
 type certs struct {
 	Public  string
 	Private string
+}
+
+type tlsconf struct {
+	Minversion          string
+	CurvePrefs          []string
+	Ciphers             []string
+	PreferServerCiphers bool
 }
 
 type logging struct {
