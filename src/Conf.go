@@ -26,6 +26,7 @@ package main
 
 import (
 	"github.com/BurntSushi/toml"
+	"os"
 )
 
 type config struct {
@@ -81,6 +82,10 @@ type user struct {
 }
 
 func ParseConfig(fileName string, conf interface{}) error {
+	if _, err := os.Stat(fileName); os.IsNotExist(err) {
+		Error("config error", err)
+		os.Exit(1)
+	}
 	_, err := toml.DecodeFile(fileName, conf)
 	return err
 }

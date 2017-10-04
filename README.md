@@ -13,19 +13,8 @@ git clone https://github.com/cseeger-epages/rest-api-go-skeleton
 ```
 
 ## Configuration
-add users by adding
-```
-[[user]]
-username = "<username>"
-password = "<password>"
-```
-
-to conf/api.conf
-
-change database settings in
-conf/api.conf section `[database]`
-
-customize your Database functions in src/Database.go for your needs
+The configuration file can be found under conf/api.conf.
+See the config file for more details
 
 ## build and run
 you can build the binary via
@@ -34,8 +23,6 @@ you can build the binary via
 ```
 and the following flags are supported
 ```
--crt  <certificate file>
--key  <certificate key file>
 -c    <config file>
 ```
 
@@ -90,7 +77,7 @@ func Handler(w http.ResponseWriter, r*http.Request) {
 
 ## additional Notes
 The Etag implementation lacks a bit of efficency since the data needs to be generated all the time to generate the Etag hash and it only saves some amount of traffic. 
-When you are implementing your data think about how you can generate the Etag on using lesser resources.
+When you are implementing your data think about how you can generate the Etag using lesser resources.
 
 Also only the basic Auth is implemented yet wich isn't very efficient, maybe some OAuth2 will be implemented later. 
 If you send less data via many requests an OAuth implementation will save some bandwidth.
