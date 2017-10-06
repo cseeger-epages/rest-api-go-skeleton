@@ -40,8 +40,9 @@ type config struct {
 }
 
 type general struct {
-	Listen string
-	Port   string
+	Listen    string
+	Port      string
+	BasicAuth bool
 }
 
 type certs struct {

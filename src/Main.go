@@ -39,8 +39,10 @@ func init() {
 	flag.Parse()
 
 	err := ParseConfig(*confFile, &Conf)
-	Error("config parse error", err)
-	os.Exit(1)
+	if err != nil {
+		Error("config parse error", err)
+		os.Exit(1)
+	}
 
 	InitLogger()
 }

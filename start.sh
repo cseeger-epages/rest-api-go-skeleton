@@ -1,3 +1,3 @@
 #!/bin/bash
 
-go run src/*go
+go run src/*.go
