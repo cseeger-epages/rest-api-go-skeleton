@@ -11,12 +11,6 @@ import (
 
 func CreateTLSConf() *tls.Config {
 
-	if Conf.Tls.Hsts {
-		Info("HTTP Strict Transport Security", map[string]interface{}{"status": "enabled"})
-	} else {
-		Info("HTTP Strict Transport Security", map[string]interface{}{"status": "disabled"})
-	}
-
 	var minversion uint16 = tls.VersionTLS12
 	switch Conf.Tls.Minversion {
 	case SSL30:
