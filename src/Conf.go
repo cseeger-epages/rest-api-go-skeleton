@@ -33,6 +33,7 @@ type config struct {
 	General   general   `toml:"general"`
 	Certs     certs     `toml:"certs"`
 	Tls       tlsconf   `toml:"tls"`
+	Cors      cors      `toml:"cors"`
 	Logging   logging   `toml:"logging"`
 	RateLimit rateLimit `toml:"ratelimit"`
 	DB        database  `toml:"database"`
@@ -57,6 +58,12 @@ type tlsconf struct {
 	PreferServerCiphers bool
 	Hsts                bool
 	HstsMaxAge          int
+}
+
+type cors struct {
+	AllowCrossOrigin bool
+	CorsMethods      []string
+	AllowFrom        string
 }
 
 type logging struct {

@@ -47,6 +47,7 @@ func init() {
 	InitLogger()
 	Info("Basic Authentication", map[string]interface{}{"enabled": Conf.General.BasicAuth})
 	Info("HTTP Strict Transport Security", map[string]interface{}{"enabled": Conf.Tls.Hsts})
+	Info("Cross Origin Policy", map[string]interface{}{"enabled": Conf.Cors.AllowCrossOrigin})
 }
 
 func main() {

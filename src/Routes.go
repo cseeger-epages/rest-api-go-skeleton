@@ -70,5 +70,19 @@ func init() {
 			"show specific project",
 			ProjectHandler,
 		},
+		Route{
+			"Cors",
+			"OPTIONS",
+			"/{endpoint}",
+			"Cross origin preflight",
+			CorsHandler,
+		},
+		Route{
+			"Cors",
+			"OPTIONS",
+			"/{endpoint}/{id}",
+			"Cross origin preflight",
+			CorsHandler,
+		},
 	}
 }

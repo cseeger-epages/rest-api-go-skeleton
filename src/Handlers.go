@@ -121,3 +121,17 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	EncodeAndSend(w, r, qs, msg)
 }
+
+func CorsHandler(w http.ResponseWriter, r *http.Request) {
+	// caching stuff is handler specific
+	w.Header().Set("Cache-Control", "no-store")
+
+	// allow authorization to be send for CORS requests
+	if Conf.Cors.AllowCrossOrigin {
+		w.Header().Set("Access-Control-Allow-Headers", "authorization")
+	}
+
+	qs := ParseQueryStrings(r)
+	msg := ""
+	EncodeAndSend(w, r, qs, msg)
+}

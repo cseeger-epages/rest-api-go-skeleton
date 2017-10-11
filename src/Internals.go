@@ -51,6 +51,12 @@ func ParseQueryStrings(r *http.Request) QueryStrings {
 // Handles some filters and does what the name says
 func EncodeAndSend(w http.ResponseWriter, r *http.Request, qs QueryStrings, msg interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
+	if Conf.Cors.AllowCrossOrigin {
+		w.Header().Set("Access-Control-Allow-Origin", Conf.Cors.AllowFrom)
+		w.Header().Set("Access-Control-Allow-Methods", strings.Join(Conf.Cors.CorsMethods, ","))
+	}
+
 	if Conf.Tls.Hsts {
 		hsts := fmt.Sprintf("max-age=%d; includeSubDomains", Conf.Tls.HstsMaxAge)
 		w.Header().Add("Strict-Transport-Security", hsts)
