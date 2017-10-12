@@ -36,7 +36,10 @@ func InitLogger() {
 	case LOGFORMATJSON:
 		log.SetFormatter(&log.JSONFormatter{})
 	case LOGFORMATTEXT:
-		log.SetFormatter(&log.TextFormatter{})
+		formatter := &log.TextFormatter{
+			FullTimestamp: true,
+		}
+		log.SetFormatter(formatter)
 	default:
 		log.WithFields(log.Fields{
 			"logformat": Conf.Logging.Type,
