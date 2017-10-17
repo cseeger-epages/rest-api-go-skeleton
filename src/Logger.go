@@ -101,6 +101,7 @@ func Logger(inner http.Handler, name string) http.Handler {
 			"request-uri": r.RequestURI,
 			"duration":    time.Since(start),
 			"name":        name,
+			"ip":          r.RemoteAddr,
 		}).Info("REQUEST")
 	})
 }

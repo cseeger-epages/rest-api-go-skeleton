@@ -29,7 +29,7 @@ import (
 	"strings"
 )
 
-func basicAuth(h http.Handler) http.Handler {
+func BasicAuthHandler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "OPTIONS" {
 			h.ServeHTTP(w, r)

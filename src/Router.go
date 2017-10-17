@@ -72,7 +72,7 @@ func AddRoutes(router *mux.Router) {
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
-			Handler(use(handler, basicAuth, httpRateLimiter.RateLimit))
+			Handler(use(handler, BasicAuthHandler, httpRateLimiter.RateLimit))
 	}
 }
 
