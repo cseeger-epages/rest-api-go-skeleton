@@ -66,7 +66,7 @@ func Help(w http.ResponseWriter, r *http.Request) {
 	var msg []PathList
 
 	for _, m := range routes {
-		msg = append(msg, PathList{m.Pattern, m.Description})
+		msg = append(msg, PathList{m.Method, m.Pattern, m.Description})
 	}
 
 	EncodeAndSend(w, r, qs, msg)

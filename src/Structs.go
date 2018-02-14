@@ -29,8 +29,9 @@ type HelpMsg struct {
 }
 
 type PathList struct {
+	Method      string
 	Pattern     string
-	Description string
+	Description interface{}
 }
 
 type ErrorMessage struct {

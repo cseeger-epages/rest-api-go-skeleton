@@ -32,7 +32,7 @@ type Route struct {
 	Name        string
 	Method      string
 	Pattern     string
-	Description string
+	Description interface{}
 	HandlerFunc http.HandlerFunc
 }
 
@@ -67,7 +67,19 @@ func init() {
 			"project",
 			"GET",
 			"/project/{project}",
-			"show specific project",
+			"get specific project",
+			ProjectHandler,
+		},
+		Route{
+			"project",
+			"POST",
+			"/project/{project}",
+			map[string]interface{}{
+				"Message": "description message",
+				"Post-parameter": map[string]string{
+					"parameter": "type - description",
+				},
+			},
 			ProjectHandler,
 		},
 		Route{
