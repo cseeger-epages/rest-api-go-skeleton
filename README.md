@@ -1,5 +1,7 @@
 # REST API Skeleton written in golang
 
+=== depricated due to [restfool-go](https://github.com/cseeger-epages/restfool-go) ===
+
 This is a very simple version supporting common features used in REST API implementations. 
 Can be used as a start for creating more advanced versions.
 
